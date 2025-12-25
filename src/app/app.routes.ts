@@ -4,6 +4,10 @@ import { RechercheFormationsComponent } from './recherche-formations/recherche-f
 import { FormationDetailsComponent } from './formation-details/formation-details.component';
 import { AdminLayoutComponent } from './admin/admin-layout/admin-layout.component';
 import { GestionCandidatsComponent } from './admin/gestion-candidats/gestion-candidats.component';
+import { GestionFormateursComponent } from './admin/gestion-formateurs/gestion-formateurs.component';
+import { GestionCategoriesComponent } from './admin/gestion-categories/gestion-categories.component';
+import { GestionFormationsComponent } from './admin/gestion-formations/gestion-formations.component';
+import { GestionSessionsComponent } from './admin/gestion-sessions/gestion-sessions.component';
 
 export const routes: Routes = [
   // Public routes
@@ -17,6 +21,10 @@ export const routes: Routes = [
     component: AdminLayoutComponent,
     children: [
       { path: 'candidats', component: GestionCandidatsComponent },
+      { path: 'formateurs', component: GestionFormateursComponent },
+      { path: 'categories', component: GestionCategoriesComponent },
+      { path: 'formations', component: GestionFormationsComponent },
+      { path: 'sessions', component: GestionSessionsComponent },
       { path: '', redirectTo: 'candidats', pathMatch: 'full' }
     ]
   }

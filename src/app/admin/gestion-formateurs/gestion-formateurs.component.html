@@ -1,0 +1,120 @@
+<div class="gestion-container">
+  <div class="page-header">
+    <h2>👨‍🏫 Gestion des Formateurs</h2>
+    <button class="btn-add" (click)="clickAddFormateur()">
+      ➕ Ajouter un Formateur
+    </button>
+  </div>
+
+  <div class="search-bar">
+    <input 
+      type="text" 
+      [(ngModel)]="searchTerm" 
+      (keyup)="filterFormateurs()" 
+      placeholder="🔍 Rechercher par nom, prénom, email..."
+      class="search-input">
+  </div>
+
+  <div class="formateurs-grid">
+    <div class="formateur-card" *ngFor="let formateur of filteredFormateurData">
+      <div class="formateur-image">
+        <img [src]="formateur.photo || 'https://via.placeholder.com/150?text=Photo'" [alt]="formateur.nom">
+      </div>
+      
+      <div class="formateur-info">
+        <h3>{{ formateur.prenom }} {{ formateur.nom }}</h3>
+        <p class="email">📧 {{ formateur.email }}</p>
+        <p class="phone">📞 {{ formateur.telephone || 'N/A' }}</p>
+        <p class="cin">🆔 CIN: {{ formateur.numeroCarteIdentite }}</p>
+        <p class="specialites" *ngIf="formateur.specialites?.length > 0">
+          🎯 Spécialités: {{ formateur.specialites.join(', ') }}
+        </p>
+        
+        <div class="formateur-actions">
+          <button class="btn-edit" (click)="onEdit(formateur)">
+            ✏️ Modifier
+          </button>
+          <button class="btn-delete" (click)="deleteFormateur(formateur)">
+            🗑️ Supprimer
+          </button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="no-formateurs" *ngIf="filteredFormateurData?.length === 0">
+    <p>👨‍🏫 Aucun formateur trouvé</p>
+  </div>
+</div>
+
+<!-- Modal Formulaire -->
+<div class="modal-overlay" *ngIf="showModal" (click)="closeModal()">
+  <div class="modal-content" (click)="$event.stopPropagation()">
+    <div class="modal-header">
+      <h5 class="modal-title">
+        {{showAddButton ? '➕ Ajouter un Formateur' : '✏️ Modifier le Formateur'}}
+      </h5>
+      <button type="button" class="close-btn" (click)="closeModal()">×</button>
+    </div>
+    
+    <div class="modal-body">
+      <form [formGroup]="formValue">
+        <div class="form-row">
+          <div class="form-group">
+            <label for="nom" class="form-label">Nom *</label>
+            <input type="text" class="form-control" id="nom" formControlName="nom" placeholder="Ex: Ben Ali">
+          </div>
+          
+          <div class="form-group">
+            <label for="prenom" class="form-label">Prénom *</label>
+            <input type="text" class="form-control" id="prenom" formControlName="prenom" placeholder="Ex: Ahmed">
+          </div>
+        </div>
+
+        <div class="form-row">
+          <div class="form-group">
+            <label for="email" class="form-label">Email *</label>
+            <input type="email" class="form-control" id="email" formControlName="email" placeholder="Ex: ahmed@example.com">
+          </div>
+          
+          <div class="form-group">
+            <label for="telephone" class="form-label">Téléphone</label>
+            <input type="tel" class="form-control" id="telephone" formControlName="telephone" placeholder="Ex: +216 12 345 678">
+          </div>
+        </div>
+
+        <div class="form-row">
+          <div class="form-group">
+            <label for="numeroCarteIdentite" class="form-label">Numéro Carte d'Identité *</label>
+            <input type="text" class="form-control" id="numeroCarteIdentite" formControlName="numeroCarteIdentite" placeholder="Ex: 12345678">
+          </div>
+          
+          <div class="form-group">
+            <label for="photo" class="form-label">URL de la Photo</label>
+            <input type="url" class="form-control" id="photo" formControlName="photo" placeholder="https://exemple.com/photo.jpg">
+          </div>
+        </div>
+
+        <div class="form-group">
+          <label for="cv" class="form-label">URL du CV (PDF)</label>
+          <input type="url" class="form-control" id="cv" formControlName="cv" placeholder="https://exemple.com/cv.pdf">
+        </div>
+
+        <div class="form-group">
+          <label for="specialites" class="form-label">Spécialités (séparées par des virgules)</label>
+          <input type="text" class="form-control" id="specialites" [(ngModel)]="specialitesInput" [ngModelOptions]="{standalone: true}" placeholder="Ex: Angular, React, Vue.js">
+        </div>
+      </form>
+    </div>
+    
+    <div class="modal-footer">
+      <button type="button" class="btn btn-secondary" (click)="closeModal()">Fermer</button>
+      <button type="button" class="btn btn-primary" (click)="postFormateurDetails()" *ngIf="showAddButton">
+        ➕ Ajouter
+      </button>
+      <button type="button" class="btn btn-warning" (click)="updateFormateurDetails()" *ngIf="!showAddButton">
+        ✏️ Modifier
+      </button>
+    </div>
+  </div>
+</div>
