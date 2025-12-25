@@ -1,0 +1,63 @@
+<div class="search-container">
+  <div class="search-header">
+    <h1>🔍 Rechercher une Formation</h1>
+    <p>Recherchez une formation selon les mots-clés, le titre ou la description</p>
+  </div>
+
+  <div class="search-bar">
+    <input 
+      type="text" 
+      [(ngModel)]="searchTerm" 
+      (keyup)="filterFormations()" 
+      placeholder="Rechercher par mots-clés, titre ou description..."
+      class="search-input">
+  </div>
+
+  <div class="results-section">
+    <h2 *ngIf="filteredFormations.length > 0">
+      {{ filteredFormations.length }} formation(s) trouvée(s)
+    </h2>
+    
+    <div class="formations-grid" *ngIf="filteredFormations.length > 0">
+      <div class="formation-card" *ngFor="let formation of filteredFormations">
+        <div class="formation-header">
+          <h3>{{ formation.titre }}</h3>
+          <span class="niveau-badge" [class.debutant]="formation.niveauDifficulte === 'débutant'"
+                [class.intermediaire]="formation.niveauDifficulte === 'intermédiaire'"
+                [class.avance]="formation.niveauDifficulte === 'avancé'">
+            {{ formation.niveauDifficulte }}
+          </span>
+        </div>
+        
+        <p class="description">{{ formation.description }}</p>
+        
+        <div class="formation-info">
+          <div class="info-item">
+            <span class="label">⏱️ Charge horaire:</span>
+            <span class="value">{{ formation.chargeHoraire }} heures</span>
+          </div>
+          
+          <div class="tags-section" *ngIf="formation.tags && formation.tags.length > 0">
+            <span class="label">🏷️ Mots-clés:</span>
+            <div class="tags">
+              <span class="tag" *ngFor="let tag of formation.tags">{{ tag }}</span>
+            </div>
+          </div>
+        </div>
+        
+        <a [routerLink]="['/formation', formation.id]" class="details-button">
+          Voir les détails →
+        </a>
+      </div>
+    </div>
+
+    <div class="no-results" *ngIf="filteredFormations.length === 0 && searchTerm">
+      <p>❌ Aucune formation trouvée pour "{{ searchTerm }}"</p>
+    </div>
+
+    <div class="no-results" *ngIf="filteredFormations.length === 0 && !searchTerm">
+      <p>🔍 Commencez à rechercher une formation</p>
+    </div>
+  </div>
+</div>
+

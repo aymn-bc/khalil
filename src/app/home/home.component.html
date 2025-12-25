@@ -1,0 +1,36 @@
+<div class="home-container">
+  <div class="hero-section">
+    <h1>🎓 Programme de Formation ISET Rades</h1>
+    <p class="subtitle">Découvrez nos formations professionnelles de qualité</p>
+  </div>
+
+  <div class="intro-section">
+    <h2>À propos de notre programme</h2>
+    <p>
+      L'ISET de Rades propose un large éventail de formations professionnelles 
+      conçues pour répondre aux besoins du marché du travail. Nos formations 
+      couvrent différents domaines et niveaux, du débutant à l'avancé, et sont 
+      animées par des formateurs expérimentés.
+    </p>
+  </div>
+
+  <div class="categories-section">
+    <h2>📚 Catégories de Formations</h2>
+    <div class="categories-grid" *ngIf="categories.length > 0">
+      <div class="category-card" *ngFor="let categorie of categories">
+        <div class="category-icon">📖</div>
+        <h3>{{ categorie.nom }}</h3>
+        <p>{{ categorie.description }}</p>
+      </div>
+    </div>
+    <div class="no-categories" *ngIf="categories.length === 0">
+      <p>Aucune catégorie disponible pour le moment.</p>
+    </div>
+  </div>
+
+  <div class="cta-section">
+    <h2>Prêt à commencer ?</h2>
+    <a routerLink="/formations" class="cta-button">🔍 Rechercher une formation</a>
+  </div>
+</div>
+

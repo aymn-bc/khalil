@@ -1,0 +1,84 @@
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+body {
+  font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+}
+
+.public-container {
+  min-height: 100vh;
+  background: linear-gradient(135deg, #e0e7ff 0%, #e9d5ff 50%, #f3e8ff 100%);
+  display: flex;
+  flex-direction: column;
+}
+
+.public-header {
+  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+  color: white;
+  padding: 2rem;
+  box-shadow: 0 4px 15px rgba(102, 126, 234, 0.3);
+}
+
+.logo h1 {
+  font-size: 3rem;
+  text-align: center;
+  text-shadow: 2px 2px 4px rgba(0,0,0,0.2);
+  margin-bottom: 0.5rem;
+}
+
+.tagline {
+  text-align: center;
+  font-size: 1.2rem;
+  font-style: italic;
+  opacity: 0.9;
+}
+
+.public-nav {
+  margin-top: 1.5rem;
+}
+
+.public-nav ul {
+  display: flex;
+  justify-content: center;
+  gap: 2rem;
+  list-style: none;
+}
+
+.public-nav a {
+  color: white;
+  text-decoration: none;
+  font-size: 1.1rem;
+  padding: 0.7rem 1.5rem;
+  border-radius: 25px;
+  transition: all 0.3s ease;
+  background: rgba(255, 255, 255, 0.2);
+}
+
+.public-nav a:hover,
+.public-nav a.active {
+  background: white;
+  color: #667eea;
+  transform: translateY(-3px);
+  box-shadow: 0 5px 15px rgba(0,0,0,0.2);
+}
+
+.public-main {
+  padding: 2rem;
+  min-height: calc(100vh - 300px);
+  flex: 1;
+}
+
+.public-footer {
+  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+  color: white;
+  padding: 2rem;
+  margin-top: auto;
+}
+
+.footer-content {
+  text-align: center;
+}
+

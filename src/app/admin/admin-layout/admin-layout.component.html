@@ -1,0 +1,23 @@
+<div class="admin-container">
+  <header class="admin-header">
+    <div class="logo">
+      <h1>🎓 ISET Rades - Administration</h1>
+    </div>
+    
+    <nav class="admin-nav">
+      <ul>
+        <li><a routerLink="/admin-space/candidats" routerLinkActive="active">👥 Candidats</a></li>
+        <li><a routerLink="/admin-space/formateurs" routerLinkActive="active">👨‍🏫 Formateurs</a></li>
+        <li><a routerLink="/admin-space/categories" routerLinkActive="active">📂 Catégories</a></li>
+        <li><a routerLink="/admin-space/formations" routerLinkActive="active">📚 Formations</a></li>
+        <li><a routerLink="/admin-space/sessions" routerLinkActive="active">📅 Sessions</a></li>
+        <li><a routerLink="/" routerLinkActive="active">🏠 Espace Public</a></li>
+      </ul>
+    </nav>
+  </header>
+
+  <main class="admin-main">
+    <router-outlet></router-outlet>
+  </main>
+</div>
+

@@ -1,0 +1,108 @@
+<div class="details-container" *ngIf="formation">
+  <div class="formation-header">
+    <h1>{{ formation.titre }}</h1>
+    <span class="niveau-badge" [class.debutant]="formation.niveauDifficulte === 'débutant'"
+          [class.intermediaire]="formation.niveauDifficulte === 'intermédiaire'"
+          [class.avance]="formation.niveauDifficulte === 'avancé'">
+      {{ formation.niveauDifficulte }}
+    </span>
+  </div>
+
+  <div class="formation-content">
+    <div class="info-section">
+      <h2>📋 Description</h2>
+      <p>{{ formation.description }}</p>
+
+      <div class="info-grid">
+        <div class="info-item">
+          <span class="label">⏱️ Charge horaire:</span>
+          <span class="value">{{ formation.chargeHoraire }} heures</span>
+        </div>
+
+        <div class="tags-section" *ngIf="formation.tags && formation.tags.length > 0">
+          <span class="label">🏷️ Mots-clés:</span>
+          <div class="tags">
+            <span class="tag" *ngFor="let tag of formation.tags">{{ tag }}</span>
+          </div>
+        </div>
+      </div>
+
+      <button class="btn-programme" (click)="downloadProgramme()">
+        📄 Télécharger le Programme (PDF)
+      </button>
+    </div>
+
+    <div class="sessions-section">
+      <h2>📅 Sessions à venir</h2>
+      
+      <div class="sessions-list" *ngIf="sessionsWithDetails.length > 0">
+        <div class="session-card" *ngFor="let sessionDetail of sessionsWithDetails">
+          <div class="session-header">
+            <h3>Session du {{ sessionDetail.session.dateDebut | date:'dd/MM/yyyy' }} 
+                au {{ sessionDetail.session.dateFin | date:'dd/MM/yyyy' }}</h3>
+            <span class="places-badge" [class.full]="sessionDetail.isFull">
+              {{ sessionDetail.inscriptionsCount }}/15 places
+            </span>
+          </div>
+
+          <p class="session-description" *ngIf="sessionDetail.session.description">
+            {{ sessionDetail.session.description }}
+          </p>
+
+          <div class="formateurs-section" *ngIf="sessionDetail.formateurs.length > 0">
+            <span class="label">👨‍🏫 Formateur(s):</span>
+            <div class="formateurs-list">
+              <span class="formateur-name" *ngFor="let formateur of sessionDetail.formateurs">
+                {{ formateur.prenom }} {{ formateur.nom }}
+              </span>
+            </div>
+          </div>
+
+          <button 
+            class="btn-inscrire" 
+            (click)="openInscriptionModal(sessionDetail.session.id)"
+            [disabled]="sessionDetail.isFull">
+            {{ sessionDetail.isFull ? 'Complet' : 'S\'inscrire' }}
+          </button>
+        </div>
+      </div>
+
+      <div class="no-sessions" *ngIf="sessionsWithDetails.length === 0">
+        <p>Aucune session programmée pour le moment.</p>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- Modal d'inscription -->
+<div class="modal-overlay" *ngIf="showInscriptionModal" (click)="closeInscriptionModal()">
+  <div class="modal-content" (click)="$event.stopPropagation()">
+    <div class="modal-header">
+      <h3>📝 Inscription à la session</h3>
+      <button class="close-btn" (click)="closeInscriptionModal()">×</button>
+    </div>
+    
+    <form [formGroup]="inscriptionForm" (ngSubmit)="submitInscription()">
+      <div class="form-group">
+        <label>Nom *</label>
+        <input type="text" formControlName="nom" required>
+      </div>
+      
+      <div class="form-group">
+        <label>Prénom *</label>
+        <input type="text" formControlName="prenom" required>
+      </div>
+      
+      <div class="form-group">
+        <label>Email *</label>
+        <input type="email" formControlName="email" required>
+      </div>
+      
+      <div class="modal-footer">
+        <button type="button" class="btn-cancel" (click)="closeInscriptionModal()">Annuler</button>
+        <button type="submit" class="btn-submit">S'inscrire</button>
+      </div>
+    </form>
+  </div>
+</div>
+
