@@ -10,7 +10,7 @@
   align-items: center;
   margin-bottom: 2rem;
   padding: 2rem;
-  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+  background: linear-gradient(135deg, #ec4899 0%, #db2777 100%);
   border-radius: 20px;
   color: white;
 }
@@ -43,7 +43,7 @@
 }
 
 .info-section h2 {
-  color: #667eea;
+  color: #ec4899;
   margin-bottom: 1rem;
 }
 
@@ -65,7 +65,7 @@
 
 .label {
   font-weight: bold;
-  color: #667eea;
+  color: #ec4899;
   margin-right: 0.5rem;
 }
 
@@ -86,7 +86,7 @@
 
 .tag {
   background: #f0f0f0;
-  color: #667eea;
+  color: #ec4899;
   padding: 0.4rem 1rem;
   border-radius: 15px;
   font-size: 0.9rem;
@@ -95,7 +95,7 @@
 
 .btn-programme {
   padding: 1rem 2rem;
-  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+  background: linear-gradient(135deg, #ec4899 0%, #db2777 100%);
   color: white;
   border: none;
   border-radius: 10px;
@@ -107,7 +107,7 @@
 
 .btn-programme:hover {
   transform: translateY(-2px);
-  box-shadow: 0 5px 15px rgba(102, 126, 234, 0.4);
+  box-shadow: 0 5px 15px rgba(236, 72, 153, 0.4);
 }
 
 .sessions-section {
@@ -118,7 +118,7 @@
 }
 
 .sessions-section h2 {
-  color: #667eea;
+  color: #ec4899;
   margin-bottom: 1.5rem;
 }
 
@@ -136,8 +136,8 @@
 }
 
 .session-card:hover {
-  border-color: #667eea;
-  box-shadow: 0 5px 15px rgba(102, 126, 234, 0.1);
+  border-color: #ec4899;
+  box-shadow: 0 5px 15px rgba(236, 72, 153, 0.1);
 }
 
 .session-header {
@@ -148,7 +148,7 @@
 }
 
 .session-header h3 {
-  color: #667eea;
+  color: #ec4899;
   margin: 0;
   font-size: 1.3rem;
 }
@@ -186,7 +186,7 @@
 
 .formateur-name {
   background: #f0f0f0;
-  color: #667eea;
+  color: #ec4899;
   padding: 0.3rem 0.8rem;
   border-radius: 15px;
   font-size: 0.9rem;
@@ -196,7 +196,7 @@
 .btn-inscrire {
   width: 100%;
   padding: 0.8rem;
-  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+  background: linear-gradient(135deg, #ec4899 0%, #db2777 100%);
   color: white;
   border: none;
   border-radius: 10px;
@@ -208,7 +208,7 @@
 
 .btn-inscrire:hover:not(:disabled) {
   transform: translateY(-2px);
-  box-shadow: 0 5px 15px rgba(102, 126, 234, 0.4);
+  box-shadow: 0 5px 15px rgba(236, 72, 153, 0.4);
 }
 
 .btn-inscrire:disabled {
@@ -253,7 +253,7 @@
 }
 
 .modal-header h3 {
-  color: #667eea;
+  color: #ec4899;
   margin: 0;
 }
 
@@ -267,7 +267,7 @@
 }
 
 .close-btn:hover {
-  color: #667eea;
+  color: #ec4899;
 }
 
 .form-group {
@@ -277,7 +277,7 @@
 .form-group label {
   display: block;
   margin-bottom: 0.5rem;
-  color: #667eea;
+  color: #ec4899;
   font-weight: bold;
 }
 
@@ -292,7 +292,7 @@
 
 .form-group input:focus {
   outline: none;
-  border-color: #667eea;
+  border-color: #ec4899;
 }
 
 .modal-footer {
@@ -323,12 +323,12 @@
 }
 
 .btn-submit {
-  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+  background: linear-gradient(135deg, #ec4899 0%, #db2777 100%);
   color: white;
 }
 
 .btn-submit:hover {
   transform: translateY(-2px);
-  box-shadow: 0 5px 15px rgba(102, 126, 234, 0.4);
+  box-shadow: 0 5px 15px rgba(236, 72, 153, 0.4);
 }
 

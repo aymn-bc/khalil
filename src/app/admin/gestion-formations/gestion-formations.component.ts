@@ -52,7 +52,7 @@ export class GestionFormationsComponent implements OnInit {
     this.formationModelObj.id = this.formationModelObj.id || this.generateId();
     
     this.api.postFormation(this.formationModelObj).subscribe(res => {
-      alert("Formation ajoutée avec succès! ✅")
+      alert("Formation ajoutée avec succès!")
       this.formValue.reset();
       this.tagsInput = '';
       this.selectedCategories = [];
@@ -87,10 +87,10 @@ export class GestionFormationsComponent implements OnInit {
   }
 
   deleteFormation(row: any) {
-    if(confirm('Êtes-vous sûr de vouloir supprimer cette formation? 🗑️')) {
+    if(confirm('Êtes-vous sûr de vouloir supprimer cette formation?')) {
       this.api.deleteFormation(row.id)
         .subscribe(res => {
-          alert("Formation supprimée ✓");
+          alert("Formation supprimée");
           this.getAllFormations();
         })
     }
@@ -120,7 +120,7 @@ export class GestionFormationsComponent implements OnInit {
     
     this.api.updateFormation(this.formationModelObj, this.formationModelObj.id)
       .subscribe(res => {
-        alert("Formation modifiée avec succès! ✨");
+        alert("Formation modifiée avec succès!");
         this.getAllFormations();
         this.showAddButton = true;
         this.formValue.reset();

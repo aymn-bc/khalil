@@ -50,7 +50,7 @@ export class GestionSessionsComponent implements OnInit {
     this.sessionModelObj.id = this.sessionModelObj.id || this.generateId();
     
     this.api.postSession(this.sessionModelObj).subscribe(res => {
-      alert("Session ajoutée avec succès! ✅")
+      alert("Session ajoutée avec succès!")
       this.formValue.reset();
       this.selectedFormateurs = [];
       this.getAllSessions();
@@ -107,10 +107,10 @@ export class GestionSessionsComponent implements OnInit {
   }
 
   deleteSession(row: any) {
-    if(confirm('Êtes-vous sûr de vouloir supprimer cette session? 🗑️')) {
+    if(confirm('Êtes-vous sûr de vouloir supprimer cette session?')) {
       this.api.deleteSession(row.id)
         .subscribe(res => {
-          alert("Session supprimée ✓");
+          alert("Session supprimée");
           this.getAllSessions();
         })
     }
@@ -136,7 +136,7 @@ export class GestionSessionsComponent implements OnInit {
     
     this.api.updateSession(this.sessionModelObj, this.sessionModelObj.id)
       .subscribe(res => {
-        alert("Session modifiée avec succès! ✨");
+        alert("Session modifiée avec succès!");
         this.getAllSessions();
         this.showAddButton = true;
         this.formValue.reset();

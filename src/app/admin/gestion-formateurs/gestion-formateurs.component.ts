@@ -13,19 +13,19 @@ import { FormsModule } from '@angular/forms';
   styleUrl: './gestion-formateurs.component.css'
 })
 export class GestionFormateursComponent implements OnInit {
-  formValue !: FormGroup;
-  formateurModelObj: Formateur = new Formateur();
-  formateurData !: any;
-  filteredFormateurData: any[] = [];
-  searchTerm: string = '';
-  showAddButton: boolean = true;
-  showModal: boolean = false;
+  formateurForm!: FormGroup;
+  formateurModel: Formateur = new Formateur();
+  formateursList: any;
+  filteredFormateurs: any[] = [];
+  searchQuery: string = '';
+  isAddMode: boolean = true;
+  isModalVisible: boolean = false;
   specialitesInput: string = '';
 
-  constructor(private formbuilder: FormBuilder, private api: ApiService) { }
+  constructor(private fb: FormBuilder, private apiService: ApiService) { }
 
   ngOnInit(): void {
-    this.formValue = this.formbuilder.group({
+    this.formateurForm = this.fb.group({
       nom: [''],
       prenom: [''],
       email: [''],
@@ -34,112 +34,121 @@ export class GestionFormateursComponent implements OnInit {
       photo: [''],
       cv: [''],
       specialites: ['']
-    })
-    this.getAllFormateurs();
+    });
+    this.loadAllFormateurs();
   }
 
-  postFormateurDetails() {
-    this.formateurModelObj.nom = this.formValue.value.nom;
-    this.formateurModelObj.prenom = this.formValue.value.prenom;
-    this.formateurModelObj.email = this.formValue.value.email;
-    this.formateurModelObj.telephone = this.formValue.value.telephone;
-    this.formateurModelObj.numeroCarteIdentite = this.formValue.value.numeroCarteIdentite;
-    this.formateurModelObj.photo = this.formValue.value.photo;
-    this.formateurModelObj.cv = this.formValue.value.cv;
-    this.formateurModelObj.specialites = this.specialitesInput.split(',').map(s => s.trim()).filter(s => s);
+  createFormateur(): void {
+    this.formateurModel.nom = this.formateurForm.value.nom;
+    this.formateurModel.prenom = this.formateurForm.value.prenom;
+    this.formateurModel.email = this.formateurForm.value.email;
+    this.formateurModel.telephone = this.formateurForm.value.telephone;
+    this.formateurModel.numeroCarteIdentite = this.formateurForm.value.numeroCarteIdentite;
+    this.formateurModel.photo = this.formateurForm.value.photo;
+    this.formateurModel.cv = this.formateurForm.value.cv;
+    this.formateurModel.specialites = this.specialitesInput.split(',').map(s => s.trim()).filter(s => s);
     
-    this.formateurModelObj.id = this.formateurModelObj.id || this.generateId();
+    this.formateurModel.id = this.formateurModel.id || this.createUniqueId();
     
-    this.api.postFormateur(this.formateurModelObj).subscribe(res => {
-      alert("Formateur ajouté avec succès! ✅")
-      this.formValue.reset();
-      this.specialitesInput = '';
-      this.getAllFormateurs();
-      this.showAddButton = true;
-      this.showModal = false;
-    }, err => {
-      alert("Erreur lors de l'ajout");
-    })
+    this.apiService.postFormateur(this.formateurModel).subscribe({
+      next: (res) => {
+        alert("Formateur ajouté avec succès!");
+        this.formateurForm.reset();
+        this.specialitesInput = '';
+        this.loadAllFormateurs();
+        this.isAddMode = true;
+        this.isModalVisible = false;
+      },
+      error: (err) => {
+        alert("Erreur lors de l'ajout");
+      }
+    });
   }
 
-  getAllFormateurs() {
-    this.api.getAllFormateurs().subscribe(res => { 
-      this.formateurData = res && res.length > 0 ? res.reverse() : [];
-      this.filteredFormateurData = [...this.formateurData];
-    })
+  loadAllFormateurs(): void {
+    this.apiService.getAllFormateurs().subscribe({
+      next: (res) => { 
+        this.formateursList = res && res.length > 0 ? res.reverse() : [];
+        this.filteredFormateurs = [...this.formateursList];
+      }
+    });
   }
 
-  deleteFormateur(row: any) {
-    if(confirm('Êtes-vous sûr de vouloir supprimer ce formateur? 🗑️')) {
-      this.api.deleteFormateur(row.id)
-        .subscribe(res => {
-          alert("Formateur supprimé ✓");
-          this.getAllFormateurs();
-        })
+  removeFormateur(formateur: any): void {
+    if(confirm('Êtes-vous sûr de vouloir supprimer ce formateur?')) {
+      this.apiService.deleteFormateur(formateur.id)
+        .subscribe({
+          next: (res) => {
+            alert("Formateur supprimé");
+            this.loadAllFormateurs();
+          }
+        });
     }
   }
 
-  onEdit(row: any) {
-    this.showAddButton = false;
-    this.showModal = true;
-    this.formateurModelObj.id = row.id;
-    this.formValue.controls['nom'].setValue(row.nom);
-    this.formValue.controls['prenom'].setValue(row.prenom);
-    this.formValue.controls['email'].setValue(row.email);
-    this.formValue.controls['telephone'].setValue(row.telephone);
-    this.formValue.controls['numeroCarteIdentite'].setValue(row.numeroCarteIdentite);
-    this.formValue.controls['photo'].setValue(row.photo);
-    this.formValue.controls['cv'].setValue(row.cv);
-    this.specialitesInput = row.specialites ? row.specialites.join(', ') : '';
+  editFormateur(formateur: any): void {
+    this.isAddMode = false;
+    this.isModalVisible = true;
+    this.formateurModel.id = formateur.id;
+    this.formateurForm.controls['nom'].setValue(formateur.nom);
+    this.formateurForm.controls['prenom'].setValue(formateur.prenom);
+    this.formateurForm.controls['email'].setValue(formateur.email);
+    this.formateurForm.controls['telephone'].setValue(formateur.telephone);
+    this.formateurForm.controls['numeroCarteIdentite'].setValue(formateur.numeroCarteIdentite);
+    this.formateurForm.controls['photo'].setValue(formateur.photo);
+    this.formateurForm.controls['cv'].setValue(formateur.cv);
+    this.specialitesInput = formateur.specialites ? formateur.specialites.join(', ') : '';
   }
 
-  updateFormateurDetails() {
-    this.formateurModelObj.nom = this.formValue.value.nom;
-    this.formateurModelObj.prenom = this.formValue.value.prenom;
-    this.formateurModelObj.email = this.formValue.value.email;
-    this.formateurModelObj.telephone = this.formValue.value.telephone;
-    this.formateurModelObj.numeroCarteIdentite = this.formValue.value.numeroCarteIdentite;
-    this.formateurModelObj.photo = this.formValue.value.photo;
-    this.formateurModelObj.cv = this.formValue.value.cv;
-    this.formateurModelObj.specialites = this.specialitesInput.split(',').map(s => s.trim()).filter(s => s);
+  updateFormateur(): void {
+    this.formateurModel.nom = this.formateurForm.value.nom;
+    this.formateurModel.prenom = this.formateurForm.value.prenom;
+    this.formateurModel.email = this.formateurForm.value.email;
+    this.formateurModel.telephone = this.formateurForm.value.telephone;
+    this.formateurModel.numeroCarteIdentite = this.formateurForm.value.numeroCarteIdentite;
+    this.formateurModel.photo = this.formateurForm.value.photo;
+    this.formateurModel.cv = this.formateurForm.value.cv;
+    this.formateurModel.specialites = this.specialitesInput.split(',').map(s => s.trim()).filter(s => s);
     
-    this.api.updateFormateur(this.formateurModelObj, this.formateurModelObj.id)
-      .subscribe(res => {
-        alert("Formateur modifié avec succès! ✨");
-        this.getAllFormateurs();
-        this.showAddButton = true;
-        this.formValue.reset();
-        this.specialitesInput = '';
-        this.showModal = false;
-      })
+    this.apiService.updateFormateur(this.formateurModel, this.formateurModel.id)
+      .subscribe({
+        next: (res) => {
+          alert("Formateur modifié avec succès!");
+          this.loadAllFormateurs();
+          this.isAddMode = true;
+          this.formateurForm.reset();
+          this.specialitesInput = '';
+          this.isModalVisible = false;
+        }
+      });
   }
 
-  filterFormateurs() {
-    const term = this.searchTerm.toLowerCase();
-    this.filteredFormateurData = this.formateurData.filter((formateur: any) => {
+  filterFormateurs(): void {
+    const query = this.searchQuery.toLowerCase();
+    this.filteredFormateurs = this.formateursList.filter((formateur: any) => {
       return (
-        (formateur.nom && formateur.nom.toLowerCase().includes(term)) ||
-        (formateur.prenom && formateur.prenom.toLowerCase().includes(term)) ||
-        (formateur.email && formateur.email.toLowerCase().includes(term))
+        (formateur.nom && formateur.nom.toLowerCase().includes(query)) ||
+        (formateur.prenom && formateur.prenom.toLowerCase().includes(query)) ||
+        (formateur.email && formateur.email.toLowerCase().includes(query))
       );
     });
   }
 
-  clickAddFormateur() {
-    this.formValue.reset();
+  openAddModal(): void {
+    this.formateurForm.reset();
     this.specialitesInput = '';
-    this.showAddButton = true;
-    this.showModal = true;
+    this.isAddMode = true;
+    this.isModalVisible = true;
   }
 
-  closeModal() {
-    this.showModal = false;
-    this.formValue.reset();
+  hideModal(): void {
+    this.isModalVisible = false;
+    this.formateurForm.reset();
     this.specialitesInput = '';
-    this.showAddButton = true;
+    this.isAddMode = true;
   }
 
-  private generateId(): string {
+  private createUniqueId(): string {
     return Date.now().toString(36) + Math.random().toString(36).substr(2);
   }
 }

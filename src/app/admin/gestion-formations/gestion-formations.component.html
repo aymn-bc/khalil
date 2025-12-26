@@ -1,81 +1,78 @@
-<div class="gestion-container">
-  <div class="page-header">
-    <h2>📚 Gestion des Formations</h2>
-    <button class="btn-add" (click)="clickAddFormation()">
-      ➕ Ajouter une Formation
+<div class="formation-management">
+  <div class="formation-management__header">
+    <h2 class="formation-management__header-title">Gestion des Formations</h2>
+    <button class="formation-management__add-button" (click)="clickAddFormation()">
+      Ajouter une Formation
     </button>
   </div>
 
-  <div class="search-bar">
+  <div class="formation-management__search">
     <input 
       type="text" 
       [(ngModel)]="searchTerm" 
       (keyup)="filterFormations()" 
-      placeholder="🔍 Rechercher par titre ou description..."
-      class="search-input">
+      placeholder="Rechercher par titre ou description..."
+      class="formation-management__search-input">
   </div>
 
-  <div class="formations-grid">
+  <div class="formation-management__grid">
     <div class="formation-card" *ngFor="let formation of filteredFormationData">
-      <div class="formation-info">
-        <h3>{{ formation.titre }}</h3>
-        <p class="description">{{ formation.description || 'Aucune description' }}</p>
-        <div class="formation-details">
-          <span class="badge">⏱️ {{ formation.chargeHoraire }}h</span>
-          <span class="badge">{{ formation.niveauDifficulte }}</span>
-        </div>
-        <div class="tags" *ngIf="formation.tags?.length > 0">
-          <span class="tag" *ngFor="let tag of formation.tags">{{ tag }}</span>
-        </div>
-        
-        <div class="formation-actions">
-          <button class="btn-edit" (click)="onEdit(formation)">
-            ✏️ Modifier
-          </button>
-          <button class="btn-delete" (click)="deleteFormation(formation)">
-            🗑️ Supprimer
-          </button>
-        </div>
+      <h3 class="formation-card__title">{{ formation.titre }}</h3>
+      <p class="formation-card__description">{{ formation.description || 'Aucune description' }}</p>
+      <div class="formation-card__details">
+        <span class="formation-card__badge">{{ formation.chargeHoraire }}h</span>
+        <span class="formation-card__badge">{{ formation.niveauDifficulte }}</span>
+      </div>
+      <div class="formation-card__tags" *ngIf="formation.tags?.length > 0">
+        <span class="formation-card__tag" *ngFor="let tag of formation.tags">{{ tag }}</span>
+      </div>
+      
+      <div class="formation-card__actions">
+        <button class="formation-card__button formation-card__button--edit" (click)="onEdit(formation)">
+          Modifier
+        </button>
+        <button class="formation-card__button formation-card__button--delete" (click)="deleteFormation(formation)">
+          Supprimer
+        </button>
       </div>
     </div>
   </div>
 
-  <div class="no-formations" *ngIf="filteredFormationData?.length === 0">
-    <p>📚 Aucune formation trouvée</p>
+  <div class="formation-management__empty" *ngIf="filteredFormationData?.length === 0">
+    <p class="formation-management__empty-text">Aucune formation trouvée</p>
   </div>
 </div>
 
-<!-- Modal Formulaire -->
-<div class="modal-overlay" *ngIf="showModal" (click)="closeModal()">
-  <div class="modal-content" (click)="$event.stopPropagation()">
-    <div class="modal-header">
-      <h5 class="modal-title">
-        {{showAddButton ? '➕ Ajouter une Formation' : '✏️ Modifier la Formation'}}
+<div class="modal" *ngIf="showModal" (click)="closeModal()">
+  <div class="modal__content" (click)="$event.stopPropagation()">
+    <div class="modal__header">
+      <h5 class="modal__title">
+        {{showAddButton ? 'Ajouter une Formation' : 'Modifier la Formation'}}
       </h5>
-      <button type="button" class="close-btn" (click)="closeModal()">×</button>
+      <button type="button" class="modal__close" (click)="closeModal()">×</button>
     </div>
     
-    <div class="modal-body">
+    <div class="modal__body">
       <form [formGroup]="formValue">
-        <div class="form-group">
-          <label for="titre" class="form-label">Titre *</label>
-          <input type="text" class="form-control" id="titre" formControlName="titre" placeholder="Ex: Angular Avancé">
+        <div class="form-field">
+          <label for="titre" class="form-field__label">Titre *</label>
+          <input type="text" class="form-field__input" id="titre" formControlName="titre" placeholder="Ex: Angular Avancé">
         </div>
 
-        <div class="form-group">
-          <label for="description" class="form-label">Description</label>
-          <textarea class="form-control" id="description" formControlName="description" rows="4" placeholder="Description de la formation..."></textarea>
+        <div class="form-field">
+          <label for="description" class="form-field__label">Description</label>
+          <textarea class="form-field__input form-field__input--textarea" id="description" formControlName="description" rows="4" placeholder="Description de la formation..."></textarea>
         </div>
 
         <div class="form-row">
-          <div class="form-group">
-            <label for="chargeHoraire" class="form-label">Charge Horaire (heures) *</label>
-            <input type="number" class="form-control" id="chargeHoraire" formControlName="chargeHoraire" min="0">
+          <div class="form-field">
+            <label for="chargeHoraire" class="form-field__label">Charge Horaire (heures) *</label>
+            <input type="number" class="form-field__input" id="chargeHoraire" formControlName="chargeHoraire" min="0">
           </div>
           
-          <div class="form-group">
-            <label for="niveauDifficulte" class="form-label">Niveau de Difficulté *</label>
-            <select class="form-control" id="niveauDifficulte" formControlName="niveauDifficulte">
+          <div class="form-field">
+            <label for="niveauDifficulte" class="form-field__label">Niveau de Difficulté *</label>
+            <select class="form-field__input" id="niveauDifficulte" formControlName="niveauDifficulte">
               <option value="débutant">Débutant</option>
               <option value="intermédiaire">Intermédiaire</option>
               <option value="avancé">Avancé</option>
@@ -83,18 +80,18 @@
           </div>
         </div>
 
-        <div class="form-group">
-          <label for="programme" class="form-label">URL du Programme (PDF)</label>
-          <input type="url" class="form-control" id="programme" formControlName="programme" placeholder="https://exemple.com/programme.pdf">
+        <div class="form-field">
+          <label for="programme" class="form-field__label">URL du Programme (PDF)</label>
+          <input type="url" class="form-field__input" id="programme" formControlName="programme" placeholder="https://exemple.com/programme.pdf">
         </div>
 
-        <div class="form-group">
-          <label for="tags" class="form-label">Tags (séparés par des virgules)</label>
-          <input type="text" class="form-control" id="tags" [(ngModel)]="tagsInput" [ngModelOptions]="{standalone: true}" placeholder="Ex: Angular, TypeScript, Frontend">
+        <div class="form-field">
+          <label for="tags" class="form-field__label">Tags (séparés par des virgules)</label>
+          <input type="text" class="form-field__input" id="tags" [(ngModel)]="tagsInput" [ngModelOptions]="{standalone: true}" placeholder="Ex: Angular, TypeScript, Frontend">
         </div>
 
-        <div class="form-group">
-          <label class="form-label">Catégories</label>
+        <div class="form-field">
+          <label class="form-field__label">Catégories</label>
           <div class="categories-checkboxes">
             <label *ngFor="let categorie of categorieData" class="checkbox-label">
               <input type="checkbox" [checked]="selectedCategories.includes(categorie.id)" (change)="toggleCategory(categorie.id)">
@@ -105,13 +102,13 @@
       </form>
     </div>
     
-    <div class="modal-footer">
-      <button type="button" class="btn btn-secondary" (click)="closeModal()">Fermer</button>
-      <button type="button" class="btn btn-primary" (click)="postFormationDetails()" *ngIf="showAddButton">
-        ➕ Ajouter
+    <div class="modal__footer">
+      <button type="button" class="button button--secondary" (click)="closeModal()">Fermer</button>
+      <button type="button" class="button button--primary" (click)="postFormationDetails()" *ngIf="showAddButton">
+        Ajouter
       </button>
-      <button type="button" class="btn btn-warning" (click)="updateFormationDetails()" *ngIf="!showAddButton">
-        ✏️ Modifier
+      <button type="button" class="button button--warning" (click)="updateFormationDetails()" *ngIf="!showAddButton">
+        Modifier
       </button>
     </div>
   </div>

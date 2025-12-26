@@ -1,105 +1,103 @@
-<div class="gestion-container">
-  <div class="page-header">
-    <h2>👥 Gestion des Candidats</h2>
-    <button class="btn-add" (click)="clickAddCandidat()">
-      ➕ Ajouter un Candidat
+<div class="candidate-management">
+  <div class="candidate-management__header">
+    <h2 class="candidate-management__header-title">Gestion des Candidats</h2>
+    <button class="candidate-management__add-button" (click)="clickAddCandidat()">
+      Ajouter un Candidat
     </button>
   </div>
 
-  <div class="search-bar">
+  <div class="candidate-management__search">
     <input 
       type="text" 
       [(ngModel)]="searchTerm" 
       (keyup)="filterCandidats()" 
-      placeholder="🔍 Rechercher par nom, prénom, email..."
-      class="search-input">
+      placeholder="Rechercher par nom, prénom, email..."
+      class="candidate-management__search-input">
   </div>
 
-  <div class="candidats-grid">
-    <div class="candidat-card" *ngFor="let candidat of filteredCandidatData">
-      <div class="candidat-image">
+  <div class="candidate-management__grid">
+    <div class="candidate-card" *ngFor="let candidat of filteredCandidatData">
+      <div class="candidate-card__image">
         <img [src]="candidat.photo || 'https://via.placeholder.com/150?text=Photo'" [alt]="candidat.nom">
       </div>
       
-      <div class="candidat-info">
-        <h3>{{ candidat.prenom }} {{ candidat.nom }}</h3>
-        <p class="email">📧 {{ candidat.email }}</p>
-        <p class="cin">🆔 CIN: {{ candidat.numeroCarteIdentite }}</p>
+      <div class="candidate-card__info">
+        <h3 class="candidate-card__title">{{ candidat.prenom }} {{ candidat.nom }}</h3>
+        <p class="candidate-card__detail">{{ candidat.email }}</p>
+        <p class="candidate-card__detail">CIN: {{ candidat.numeroCarteIdentite }}</p>
         
-        <div class="candidat-actions">
-          <button class="btn-edit" (click)="onEdit(candidat)">
-            ✏️ Modifier
+        <div class="candidate-card__actions">
+          <button class="candidate-card__button candidate-card__button--edit" (click)="onEdit(candidat)">
+            Modifier
           </button>
-          <button class="btn-delete" (click)="deleteCandidat(candidat)">
-            🗑️ Supprimer
+          <button class="candidate-card__button candidate-card__button--delete" (click)="deleteCandidat(candidat)">
+            Supprimer
           </button>
         </div>
       </div>
     </div>
   </div>
 
-  <div class="no-candidats" *ngIf="filteredCandidatData?.length === 0">
-    <p>👥 Aucun candidat trouvé</p>
+  <div class="candidate-management__empty" *ngIf="filteredCandidatData?.length === 0">
+    <p class="candidate-management__empty-text">Aucun candidat trouvé</p>
   </div>
 </div>
 
-<!-- Modal Formulaire -->
-<div class="modal-overlay" *ngIf="showModal" (click)="closeModal()">
-  <div class="modal-content" (click)="$event.stopPropagation()">
-    <div class="modal-header">
-      <h5 class="modal-title">
-        {{showAddButton ? '➕ Ajouter un Candidat' : '✏️ Modifier le Candidat'}}
+<div class="modal" *ngIf="showModal" (click)="closeModal()">
+  <div class="modal__content" (click)="$event.stopPropagation()">
+    <div class="modal__header">
+      <h5 class="modal__title">
+        {{showAddButton ? 'Ajouter un Candidat' : 'Modifier le Candidat'}}
       </h5>
-      <button type="button" class="close-btn" (click)="closeModal()">×</button>
+      <button type="button" class="modal__close" (click)="closeModal()">×</button>
     </div>
     
-    <div class="modal-body">
+    <div class="modal__body">
       <form [formGroup]="formValue">
         <div class="form-row">
-          <div class="form-group">
-            <label for="nom" class="form-label">Nom *</label>
-            <input type="text" class="form-control" id="nom" formControlName="nom" placeholder="Ex: Ben Ali">
+          <div class="form-field">
+            <label for="nom" class="form-field__label">Nom *</label>
+            <input type="text" class="form-field__input" id="nom" formControlName="nom" placeholder="Ex: Ben Ali">
           </div>
           
-          <div class="form-group">
-            <label for="prenom" class="form-label">Prénom *</label>
-            <input type="text" class="form-control" id="prenom" formControlName="prenom" placeholder="Ex: Ahmed">
+          <div class="form-field">
+            <label for="prenom" class="form-field__label">Prénom *</label>
+            <input type="text" class="form-field__input" id="prenom" formControlName="prenom" placeholder="Ex: Ahmed">
           </div>
         </div>
 
         <div class="form-row">
-          <div class="form-group">
-            <label for="email" class="form-label">Email *</label>
-            <input type="email" class="form-control" id="email" formControlName="email" placeholder="Ex: ahmed@example.com">
+          <div class="form-field">
+            <label for="email" class="form-field__label">Email *</label>
+            <input type="email" class="form-field__input" id="email" formControlName="email" placeholder="Ex: ahmed@example.com">
           </div>
           
-          <div class="form-group">
-            <label for="numeroCarteIdentite" class="form-label">Numéro Carte d'Identité *</label>
-            <input type="text" class="form-control" id="numeroCarteIdentite" formControlName="numeroCarteIdentite" placeholder="Ex: 12345678">
+          <div class="form-field">
+            <label for="numeroCarteIdentite" class="form-field__label">Numéro Carte d'Identité *</label>
+            <input type="text" class="form-field__input" id="numeroCarteIdentite" formControlName="numeroCarteIdentite" placeholder="Ex: 12345678">
           </div>
         </div>
 
-        <div class="form-group">
-          <label for="photo" class="form-label">URL de la Photo</label>
-          <input type="url" class="form-control" id="photo" formControlName="photo" placeholder="https://exemple.com/photo.jpg">
+        <div class="form-field">
+          <label for="photo" class="form-field__label">URL de la Photo</label>
+          <input type="url" class="form-field__input" id="photo" formControlName="photo" placeholder="https://exemple.com/photo.jpg">
         </div>
 
-        <div class="form-group">
-          <label for="motDePasse" class="form-label">Mot de passe *</label>
-          <input type="password" class="form-control" id="motDePasse" formControlName="motDePasse" placeholder="Mot de passe">
+        <div class="form-field">
+          <label for="motDePasse" class="form-field__label">Mot de passe *</label>
+          <input type="password" class="form-field__input" id="motDePasse" formControlName="motDePasse" placeholder="Mot de passe">
         </div>
       </form>
     </div>
     
-    <div class="modal-footer">
-      <button type="button" class="btn btn-secondary" (click)="closeModal()">Fermer</button>
-      <button type="button" class="btn btn-primary" (click)="postCandidatDetails()" *ngIf="showAddButton">
-        ➕ Ajouter
+    <div class="modal__footer">
+      <button type="button" class="button button--secondary" (click)="closeModal()">Fermer</button>
+      <button type="button" class="button button--primary" (click)="postCandidatDetails()" *ngIf="showAddButton">
+        Ajouter
       </button>
-      <button type="button" class="btn btn-warning" (click)="updateCandidatDetails()" *ngIf="!showAddButton">
-        ✏️ Modifier
+      <button type="button" class="button button--warning" (click)="updateCandidatDetails()" *ngIf="!showAddButton">
+        Modifier
       </button>
     </div>
   </div>
 </div>
-

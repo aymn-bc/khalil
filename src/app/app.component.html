@@ -1,27 +1,29 @@
-<div class="public-container">
-  <header class="public-header">
-    <div class="logo">
-      <h1>🎓 ISET Rades</h1>
-      <p class="tagline">Gestion des Sessions de Formation</p>
+<div class="main-container">
+  <header class="main-container__header">
+    <div class="main-container__header-top">
+      <div class="main-container__logo">
+        <h1 class="main-container__logo-heading">ISET Rades</h1>
+      </div>
+      <nav class="main-container__navigation">
+        <ul class="main-container__nav-list">
+          <li><a routerLink="/" routerLinkActive="active" class="main-container__nav-link">Accueil</a></li>
+          <li><a routerLink="/formations" routerLinkActive="active" class="main-container__nav-link">Formations</a></li>
+          <li><a routerLink="/admin-space" routerLinkActive="active" class="main-container__nav-link">Espace Admin</a></li>
+        </ul>
+      </nav>
     </div>
-    
-    <nav class="public-nav">
-      <ul>
-        <li><a routerLink="/" routerLinkActive="active">🏠 Accueil</a></li>
-        <li><a routerLink="/formations" routerLinkActive="active">🔍 Formations</a></li>
-
-        <li><a routerLink="/admin-space" routerLinkActive="active">🔑 Espace Admin</a></li>
-      </ul>
-    </nav>
+    <div class="main-container__header-bottom">
+      <p class="main-container__tagline">Gestion des Sessions de Formation</p>
+    </div>
   </header>
 
-  <main class="public-main">
+  <main class="main-container__content">
     <router-outlet></router-outlet>
-</main>
+  </main>
 
-  <footer class="public-footer">
-    <div class="footer-content">
-      <p>© 2025 ISET Rades - Tous droits réservés ✨</p>
+  <footer class="main-container__footer">
+    <div class="main-container__footer-content">
+      <p class="main-container__footer-text">© 2025 ISET Rades - Tous droits réservés</p>
     </div>
   </footer>
 </div>

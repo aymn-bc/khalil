@@ -47,7 +47,7 @@ export class GestionCandidatsComponent implements OnInit {
     this.candidatModelObj.id = (++this.currentMaxId).toString();
     
     this.api.postCandidat(this.candidatModelObj).subscribe(res => {
-      alert("Candidat ajouté avec succès! ✅")
+      alert("Candidat ajouté avec succès!")
       this.formValue.reset();
       this.getAllCandidats();
       this.showAddButton = true;
@@ -70,10 +70,10 @@ export class GestionCandidatsComponent implements OnInit {
   }
 
   deleteCandidat(row: any) {
-    if(confirm('Êtes-vous sûr de vouloir supprimer ce candidat? 🗑️')) {
+    if(confirm('Êtes-vous sûr de vouloir supprimer ce candidat?')) {
       this.api.deleteCandidat(row.id)
         .subscribe(res => {
-          alert("Candidat supprimé ✓");
+          alert("Candidat supprimé");
           this.getAllCandidats();
         })
     }
@@ -101,7 +101,7 @@ export class GestionCandidatsComponent implements OnInit {
     
     this.api.updateCandidat(this.candidatModelObj, this.candidatModelObj.id)
       .subscribe(res => {
-        alert("Candidat modifié avec succès! ✨");
+        alert("Candidat modifié avec succès!");
         this.getAllCandidats();
         this.showAddButton = true;
         this.formValue.reset();

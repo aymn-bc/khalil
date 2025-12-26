@@ -9,5 +9,5 @@ import { RouterLink, RouterLinkActive, RouterOutlet } from '@angular/router';
   styleUrl: './app.component.css'
 })
 export class AppComponent {
-  title = 'ISET Rades - Gestion des Formations';
+  appTitle = 'ISET Rades - Gestion des Formations';
 }

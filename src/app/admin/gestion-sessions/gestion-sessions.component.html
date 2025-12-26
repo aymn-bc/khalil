@@ -1,89 +1,86 @@
-<div class="gestion-container">
-  <div class="page-header">
-    <h2>📅 Gestion des Sessions</h2>
-    <button class="btn-add" (click)="clickAddSession()">
-      ➕ Ajouter une Session
+<div class="session-management">
+  <div class="session-management__header">
+    <h2 class="session-management__header-title">Gestion des Sessions</h2>
+    <button class="session-management__add-button" (click)="clickAddSession()">
+      Ajouter une Session
     </button>
   </div>
 
-  <div class="search-bar">
+  <div class="session-management__search">
     <input 
       type="text" 
       [(ngModel)]="searchTerm" 
       (keyup)="filterSessions()" 
-      placeholder="🔍 Rechercher par formation ou description..."
-      class="search-input">
+      placeholder="Rechercher par formation ou description..."
+      class="session-management__search-input">
   </div>
 
-  <div class="sessions-grid">
+  <div class="session-management__grid">
     <div class="session-card" *ngFor="let session of filteredSessionData">
-      <div class="session-info">
-        <h3>{{ getFormationName(session.formationId) }}</h3>
-        <p class="description">{{ session.description || 'Aucune description' }}</p>
-        <div class="session-details">
-          <p><strong>📅 Début:</strong> {{ session.dateDebut | date:'dd/MM/yyyy' }}</p>
-          <p><strong>📅 Fin:</strong> {{ session.dateFin | date:'dd/MM/yyyy' }}</p>
-          <p><strong>👨‍🏫 Formateurs:</strong> {{ getFormateurNames(session.formateurIds) }}</p>
-          <p><strong>👥 Candidats:</strong> {{ session.candidatIds?.length || 0 }}</p>
-        </div>
-        
-        <div class="session-actions">
-          <button class="btn-edit" (click)="onEdit(session)">
-            ✏️ Modifier
-          </button>
-          <button class="btn-delete" (click)="deleteSession(session)">
-            🗑️ Supprimer
-          </button>
-        </div>
+      <h3 class="session-card__title">{{ getFormationName(session.formationId) }}</h3>
+      <p class="session-card__description">{{ session.description || 'Aucune description' }}</p>
+      <div class="session-card__details">
+        <p class="session-card__detail"><strong>Début:</strong> {{ session.dateDebut | date:'dd/MM/yyyy' }}</p>
+        <p class="session-card__detail"><strong>Fin:</strong> {{ session.dateFin | date:'dd/MM/yyyy' }}</p>
+        <p class="session-card__detail"><strong>Formateurs:</strong> {{ getFormateurNames(session.formateurIds) }}</p>
+        <p class="session-card__detail"><strong>Candidats:</strong> {{ session.candidatIds?.length || 0 }}</p>
+      </div>
+      
+      <div class="session-card__actions">
+        <button class="session-card__button session-card__button--edit" (click)="onEdit(session)">
+          Modifier
+        </button>
+        <button class="session-card__button session-card__button--delete" (click)="deleteSession(session)">
+          Supprimer
+        </button>
       </div>
     </div>
   </div>
 
-  <div class="no-sessions" *ngIf="filteredSessionData?.length === 0">
-    <p>📅 Aucune session trouvée</p>
+  <div class="session-management__empty" *ngIf="filteredSessionData?.length === 0">
+    <p class="session-management__empty-text">Aucune session trouvée</p>
   </div>
 </div>
 
-<!-- Modal Formulaire -->
-<div class="modal-overlay" *ngIf="showModal" (click)="closeModal()">
-  <div class="modal-content" (click)="$event.stopPropagation()">
-    <div class="modal-header">
-      <h5 class="modal-title">
-        {{showAddButton ? '➕ Ajouter une Session' : '✏️ Modifier la Session'}}
+<div class="modal" *ngIf="showModal" (click)="closeModal()">
+  <div class="modal__content" (click)="$event.stopPropagation()">
+    <div class="modal__header">
+      <h5 class="modal__title">
+        {{showAddButton ? 'Ajouter une Session' : 'Modifier la Session'}}
       </h5>
-      <button type="button" class="close-btn" (click)="closeModal()">×</button>
+      <button type="button" class="modal__close" (click)="closeModal()">×</button>
     </div>
     
-    <div class="modal-body">
+    <div class="modal__body">
       <form [formGroup]="formValue">
-        <div class="form-group">
-          <label for="formationId" class="form-label">Formation *</label>
-          <select class="form-control" id="formationId" formControlName="formationId">
+        <div class="form-field">
+          <label for="formationId" class="form-field__label">Formation *</label>
+          <select class="form-field__input" id="formationId" formControlName="formationId">
             <option value="">Sélectionner une formation</option>
             <option *ngFor="let formation of formationData" [value]="formation.id">{{ formation.titre }}</option>
           </select>
         </div>
 
         <div class="form-row">
-          <div class="form-group">
-            <label for="dateDebut" class="form-label">Date de Début *</label>
-            <input type="date" class="form-control" id="dateDebut" formControlName="dateDebut">
+          <div class="form-field">
+            <label for="dateDebut" class="form-field__label">Date de Début *</label>
+            <input type="date" class="form-field__input" id="dateDebut" formControlName="dateDebut">
           </div>
           
-          <div class="form-group">
-            <label for="dateFin" class="form-label">Date de Fin *</label>
-            <input type="date" class="form-control" id="dateFin" formControlName="dateFin">
+          <div class="form-field">
+            <label for="dateFin" class="form-field__label">Date de Fin *</label>
+            <input type="date" class="form-field__input" id="dateFin" formControlName="dateFin">
           </div>
         </div>
 
-        <div class="form-group">
-          <label for="description" class="form-label">Description</label>
-          <textarea class="form-control" id="description" formControlName="description" rows="4" placeholder="Description de la session..."></textarea>
+        <div class="form-field">
+          <label for="description" class="form-field__label">Description</label>
+          <textarea class="form-field__input form-field__input--textarea" id="description" formControlName="description" rows="4" placeholder="Description de la session..."></textarea>
         </div>
 
-        <div class="form-group">
-          <label class="form-label">Formateurs (max 2) *</label>
-          <div class="formateurs-checkboxes">
+        <div class="form-field">
+          <label class="form-field__label">Formateurs (max 2) *</label>
+          <div class="trainers-checkboxes">
             <label *ngFor="let formateur of formateurData" class="checkbox-label">
               <input type="checkbox" [checked]="selectedFormateurs.includes(formateur.id)" (change)="toggleFormateur(formateur.id)" [disabled]="!selectedFormateurs.includes(formateur.id) && selectedFormateurs.length >= 2">
               {{ formateur.prenom }} {{ formateur.nom }}
@@ -93,13 +90,13 @@
       </form>
     </div>
     
-    <div class="modal-footer">
-      <button type="button" class="btn btn-secondary" (click)="closeModal()">Fermer</button>
-      <button type="button" class="btn btn-primary" (click)="postSessionDetails()" *ngIf="showAddButton">
-        ➕ Ajouter
+    <div class="modal__footer">
+      <button type="button" class="button button--secondary" (click)="closeModal()">Fermer</button>
+      <button type="button" class="button button--primary" (click)="postSessionDetails()" *ngIf="showAddButton">
+        Ajouter
       </button>
-      <button type="button" class="btn btn-warning" (click)="updateSessionDetails()" *ngIf="!showAddButton">
-        ✏️ Modifier
+      <button type="button" class="button button--warning" (click)="updateSessionDetails()" *ngIf="!showAddButton">
+        Modifier
       </button>
     </div>
   </div>

@@ -13,102 +13,111 @@ import { FormsModule } from '@angular/forms';
   styleUrl: './gestion-categories.component.css'
 })
 export class GestionCategoriesComponent implements OnInit {
-  formValue !: FormGroup;
-  categorieModelObj: Categorie = new Categorie();
-  categorieData !: any;
-  filteredCategorieData: any[] = [];
-  searchTerm: string = '';
-  showAddButton: boolean = true;
-  showModal: boolean = false;
+  categoryForm!: FormGroup;
+  categoryModel: Categorie = new Categorie();
+  categoriesList: any;
+  filteredCategories: any[] = [];
+  searchQuery: string = '';
+  isAddMode: boolean = true;
+  isModalVisible: boolean = false;
 
-  constructor(private formbuilder: FormBuilder, private api: ApiService) { }
+  constructor(private fb: FormBuilder, private apiService: ApiService) { }
 
   ngOnInit(): void {
-    this.formValue = this.formbuilder.group({
+    this.categoryForm = this.fb.group({
       nom: [''],
       description: ['']
-    })
-    this.getAllCategories();
+    });
+    this.loadAllCategories();
   }
 
-  postCategorieDetails() {
-    this.categorieModelObj.nom = this.formValue.value.nom;
-    this.categorieModelObj.description = this.formValue.value.description;
-    this.categorieModelObj.id = this.categorieModelObj.id || this.generateId();
+  createCategory(): void {
+    this.categoryModel.nom = this.categoryForm.value.nom;
+    this.categoryModel.description = this.categoryForm.value.description;
+    this.categoryModel.id = this.categoryModel.id || this.createUniqueId();
     
-    this.api.postCategorie(this.categorieModelObj).subscribe(res => {
-      alert("Catégorie ajoutée avec succès! ✅")
-      this.formValue.reset();
-      this.getAllCategories();
-      this.showAddButton = true;
-      this.showModal = false;
-    }, err => {
-      alert("Erreur lors de l'ajout");
-    })
+    this.apiService.postCategorie(this.categoryModel).subscribe({
+      next: (res) => {
+        alert("Catégorie ajoutée avec succès!");
+        this.categoryForm.reset();
+        this.loadAllCategories();
+        this.isAddMode = true;
+        this.isModalVisible = false;
+      },
+      error: (err) => {
+        alert("Erreur lors de l'ajout");
+      }
+    });
   }
 
-  getAllCategories() {
-    this.api.getAllCategories().subscribe(res => { 
-      this.categorieData = res && res.length > 0 ? res.reverse() : [];
-      this.filteredCategorieData = [...this.categorieData];
-    })
+  loadAllCategories(): void {
+    this.apiService.getAllCategories().subscribe({
+      next: (res) => { 
+        this.categoriesList = res && res.length > 0 ? res.reverse() : [];
+        this.filteredCategories = [...this.categoriesList];
+      }
+    });
   }
 
-  deleteCategorie(row: any) {
-    if(confirm('Êtes-vous sûr de vouloir supprimer cette catégorie? 🗑️')) {
-      this.api.deleteCategorie(row.id)
-        .subscribe(res => {
-          alert("Catégorie supprimée ✓");
-          this.getAllCategories();
-        })
+  removeCategory(category: any): void {
+    if(confirm('Êtes-vous sûr de vouloir supprimer cette catégorie?')) {
+      this.apiService.deleteCategorie(category.id)
+        .subscribe({
+          next: (res) => {
+            alert("Catégorie supprimée");
+            this.loadAllCategories();
+          }
+        });
     }
   }
 
-  onEdit(row: any) {
-    this.showAddButton = false;
-    this.showModal = true;
-    this.categorieModelObj.id = row.id;
-    this.formValue.controls['nom'].setValue(row.nom);
-    this.formValue.controls['description'].setValue(row.description);
+  editCategory(category: any): void {
+    this.isAddMode = false;
+    this.isModalVisible = true;
+    this.categoryModel.id = category.id;
+    this.categoryForm.controls['nom'].setValue(category.nom);
+    this.categoryForm.controls['description'].setValue(category.description);
   }
 
-  updateCategorieDetails() {
-    this.categorieModelObj.nom = this.formValue.value.nom;
-    this.categorieModelObj.description = this.formValue.value.description;
+  updateCategory(): void {
+    this.categoryModel.nom = this.categoryForm.value.nom;
+    this.categoryModel.description = this.categoryForm.value.description;
     
-    this.api.updateCategorie(this.categorieModelObj, this.categorieModelObj.id)
-      .subscribe(res => {
-        alert("Catégorie modifiée avec succès! ✨");
-        this.getAllCategories();
-        this.showAddButton = true;
-        this.formValue.reset();
-        this.showModal = false;
-      })
+    this.apiService.updateCategorie(this.categoryModel, this.categoryModel.id)
+      .subscribe({
+        next: (res) => {
+          alert("Catégorie modifiée avec succès!");
+          this.loadAllCategories();
+          this.isAddMode = true;
+          this.categoryForm.reset();
+          this.isModalVisible = false;
+        }
+      });
   }
 
-  filterCategories() {
-    const term = this.searchTerm.toLowerCase();
-    this.filteredCategorieData = this.categorieData.filter((categorie: any) => {
+  filterCategories(): void {
+    const query = this.searchQuery.toLowerCase();
+    this.filteredCategories = this.categoriesList.filter((cat: any) => {
       return (
-        (categorie.nom && categorie.nom.toLowerCase().includes(term)) ||
-        (categorie.description && categorie.description.toLowerCase().includes(term))
+        (cat.nom && cat.nom.toLowerCase().includes(query)) ||
+        (cat.description && cat.description.toLowerCase().includes(query))
       );
     });
   }
 
-  clickAddCategorie() {
-    this.formValue.reset();
-    this.showAddButton = true;
-    this.showModal = true;
+  openAddModal(): void {
+    this.categoryForm.reset();
+    this.isAddMode = true;
+    this.isModalVisible = true;
   }
 
-  closeModal() {
-    this.showModal = false;
-    this.formValue.reset();
-    this.showAddButton = true;
+  hideModal(): void {
+    this.isModalVisible = false;
+    this.categoryForm.reset();
+    this.isAddMode = true;
   }
 
-  private generateId(): string {
+  private createUniqueId(): string {
     return Date.now().toString(36) + Math.random().toString(36).substr(2);
   }
 }
